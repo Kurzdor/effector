@@ -3,6 +3,9 @@ id: glossary
 title: Glossary
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 This is a glossary of the core terms in Effector, along with their type signatures. The types are documented using [TypeScript notation](http://typescriptlang.org).
 
 ## Event
@@ -187,29 +190,32 @@ Function, returned by [forward](./api/effector/forward.md), [event.watch](./api/
 
 Most of functions in api mustn't call other events or effects: it's easier to reason about application dataflow when imperative triggers are grouped inside watchers and effect handlers rather than spread across entire business logic.
 
-**Correct**, imperative:
+**Incorrect**:
 
 ```js
-import {createStore, createEvent} from 'effector'
-
-const login = createStore('guest')
-
-const loginSize = login.map(login => login.length)
+import {createStore, createEvent, forward} from 'effector'
 
 const submitLoginSize = createEvent()
 
-loginSize.watch(size => {
-  submitLoginSize(size)
+const login = createStore('guest')
+const loginSize = login.map(login => {
+  // Don't do this!
+  submitLoginSize(login.length)
+  return login.length
 })
 ```
 
-[Try it](https://share.effector.dev/D5hV8C70)
+**Correct**:
 
-[store.map in docs](./api/effector/Store.md#mapfn-state-state-laststate-t--t)
-
-[store.watch in docs](./api/effector/Store.md#watchwatcher)
-
-**Correct**, declarative:
+<Tabs
+  groupId="pureness"
+  defaultValue="declarative"
+  values={[
+    { label: 'Declarative way', value: 'declarative', },
+    { label: 'Imperative way', value: 'imperative', },
+  ]
+}>
+<TabItem value="declarative">
 
 ```js
 import {createStore, createEvent, forward} from 'effector'
@@ -226,21 +232,34 @@ forward({
 })
 ```
 
-[Try it](https://share.effector.dev/it0gXQLI)
+[Try it in Playground](https://share.effector.dev/it0gXQLI)
 
-[forward in docs](./api/effector/forward.md)
-
-**Incorrect**:
+</TabItem>
+<TabItem value="imperative">
 
 ```js
-import {createStore, createEvent, forward} from 'effector'
+import {createStore, createEvent} from 'effector'
+
+const login = createStore('guest')
+
+const loginSize = login.map(login => login.length)
 
 const submitLoginSize = createEvent()
 
-const login = createStore('guest')
-const loginSize = login.map(login => {
-  // no! use forward or watch instead
-  submitLoginSize(login.length)
-  return login.length
+loginSize.watch(size => {
+  submitLoginSize(size)
 })
 ```
+
+[Try it in Playground](https://share.effector.dev/D5hV8C70)
+
+</TabItem>
+</Tabs>
+
+---
+
+See:  
+
+[store.map](./api/effector/Store.md#mapfn-state-state-laststate-t--t)  
+[forward](./api/effector/forward.md)  
+[store.watch](./api/effector/Store.md#watchwatcher)  
