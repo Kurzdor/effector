@@ -1,0 +1,143 @@
+---
+id: installation
+title: Installation
+---
+
+<!-- https://v2.docusaurus.io/docs/markdown-features#tabs -->
+<!-- https://v2.docusaurus.io/docs/markdown-features#multi-language-support-code-blocks -->
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="npm"
+  values={[
+    { label: 'npm', value: 'npm', },
+    { label: 'yarn', value: 'yarn', },
+    { label: 'pnpm', value: 'pnpm', },
+  ]
+}>
+<TabItem value="npm">
+
+```bash
+npm install --save effector
+```
+
+</TabItem>
+<TabItem value="yarn">
+
+```bash
+yarn add effector
+```
+
+</TabItem>
+<TabItem value="pnpm">
+
+```bash
+pnpm add effector
+```
+
+</TabItem>
+</Tabs>
+
+
+## Complementary packages
+
+### React
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="npm"
+  values={[
+    { label: 'npm', value: 'npm', },
+    { label: 'yarn', value: 'yarn', },
+    { label: 'pnpm', value: 'pnpm', },
+  ]
+}>
+<TabItem value="npm">
+
+```bash
+npm install --save effector-react
+```
+
+</TabItem>
+<TabItem value="yarn">
+
+```bash
+yarn add effector-react
+```
+
+</TabItem>
+<TabItem value="pnpm">
+
+```bash
+pnpm add effector-react
+```
+
+</TabItem>
+</Tabs>
+
+### Vue
+
+<Tabs
+  groupId="package-manager"
+  defaultValue="npm"
+  values={[
+    { label: 'npm', value: 'npm', },
+    { label: 'yarn', value: 'yarn', },
+    { label: 'pnpm', value: 'pnpm', },
+  ]
+}>
+<TabItem value="npm">
+
+```bash
+npm install --save effector-vue
+```
+
+</TabItem>
+<TabItem value="yarn">
+
+```bash
+yarn add effector-vue
+```
+
+</TabItem>
+<TabItem value="pnpm">
+
+```bash
+pnpm add effector-vue
+```
+
+</TabItem>
+</Tabs>
+
+### Svelte
+
+Svelte works with Effector out of the box, no additional packages needed. 
+Example:
+
+```js
+<script>
+  import { createEvent, createStore } from 'effector'
+
+  const increment = createEvent()
+  const decrement = createEvent()
+  const reset = createEvent()
+
+  const counter = createStore(0)
+    .on(increment, curr => curr + 1)
+    .on(decrement, curr => curr - 1)
+    .reset(reset)
+
+  $: console.log($counter)
+</script>
+
+<div class="app">
+  <div>Counter: {$counter}</div>
+	<button on:click={increment}>Increment</button>
+  <button on:click={decrement}>Decrement</button>
+  <button on:click={reset}>Reset</button>
+</div>
+```
+
+See ["Word Chain"](https://github.com/today-/citycatch) game application written with Svelte and Effector.
