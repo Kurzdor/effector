@@ -18,9 +18,9 @@ module.exports = {
       indexName: 'effector',
     },
     navbar: {
-      title: 'Effector',
+      title: 'еffector',
       logo: {
-        alt: 'Effector Logo',
+        alt: 'еffector logo',
         src: 'img/comet.png',
       },
       links: [
