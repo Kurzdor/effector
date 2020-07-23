@@ -34,9 +34,7 @@ Adding types to each slice of state is a good place to start since it does
 not rely on other types. In this example we start by describing
 the chat store's slice of state:
 
-```typescript
-// src/effector/chat/types.ts
-
+```typescript title="src/effector/chat/types.ts"
 export interface Message {
   id: string
   user: string
@@ -51,9 +49,7 @@ export interface ChatState {
 
 And then do the same for the system store's slice of state:
 
-```typescript
-// src/effector/system/types.ts
-
+```typescript title="src/effector/chat/types.ts"
 export interface SystemState {
   loggedIn: boolean
   session: string
@@ -70,15 +66,11 @@ To effectively structure the project code, you can break the application
 logic into separate domains that combine all the logic of working with this
 part of the application.
 
-```typescript
-// src/effector/chat/domain.ts
-
+```typescript title="src/effector/chat/domain.ts"
 export const ChatDomain = createDomain()
 ```
 
-```typescript
-// src/effector/system/domain.ts
-
+```typescript title="src/effector/system/domain.ts"
 export const SystemDomain = createDomain()
 ```
 
@@ -87,9 +79,7 @@ export const SystemDomain = createDomain()
 All events can be typed through their payload. Effects used to handle async
 reactions and events for sync reactions.
 
-```typescript
-// src/effector/chat/events.ts
-
+```typescript title="src/effector/chat/events.ts"
 export const sendMessage = ChatDomain.effect<Message, Message, Error>()
 
 export const deleteMessage = ChatDomain.effect<Message, Message, Error>()
@@ -98,9 +88,7 @@ export const deleteMessage = ChatDomain.effect<Message, Message, Error>()
 Each effect must be provided with a handler function that will provide final
 processing. You can connect them at any time, so leave it for further action.
 
-```typescript
-// src/effector/system/events.ts
-
+```typescript title="src/effector/system/events.ts"
 export const updateSession = SystemDomain.event<SystemState>()
 ```
 
@@ -109,9 +97,7 @@ export const updateSession = SystemDomain.event<SystemState>()
 Keep yours stores as simple as possible. Let each store be responsible for its
 part of the state in the general state of the application or domain.
 
-```typescript
-// src/effector/chat/store.ts
-
+```typescript title="src/effector/chat/store.ts"
 const initialState: Message[] = [
   {
     id: oid(),
@@ -134,9 +120,7 @@ the handler will be called, since the typescript has enough information to deduc
 all the necessary types, it can also guarantee the correctness of the returned
 value from this handler.
 
-```typescript
-// src/effector/system/store.ts
-
+```typescript title="src/effector/system/store.ts"
 const initialState: SystemState = {
   loggedIn: false,
   session: '',
@@ -159,9 +143,7 @@ to store data you can use `useStore` hook from `effector-react` package.
 
 Let start with implement effect backend
 
-```typescript
-// src/api/MessageApi.ts
-
+```typescript title="src/api/MessageApi.ts"
 export class MessageApi {
   public static sendMessage = (message: Message) =>
     new Promise<Message>(resolve => setTimeout(() => resolve(message), 2000))
@@ -173,9 +155,7 @@ export class MessageApi {
 
 Then bind created handlers to effects
 
-```typescript
-// src/index.tsx
-
+```typescript title="src/index.tsx"
 sendMessageFx.use(MessageApi.sendMessage)
 deleteMessageFx.use(MessageApi.deleteMessage)
 ```
@@ -183,9 +163,7 @@ deleteMessageFx.use(MessageApi.deleteMessage)
 Then we can implement components which uses data from stores. And start
 operating with our effects.
 
-```typescript jsx
-// src/ChatHistory.tsx
-
+```typescript jsx title="src/ChatHistory.tsx"
 export const ChatHistory: React.FC = () => {
   const messages = useStore(MessageList)
 
@@ -207,9 +185,7 @@ Also, close attention should be paid to the moment that the data from the
 local state can be transmitted to the final effect. For these purposes,
 the forward method is used. Here is an example of such use in the component.
 
-```typescript jsx
-// src/ChatInterface.tsx
-
+```typescript jsx title="src/ChatInterface.tsx"
 const onSend = ChatDomain.event<string>()
 
 forward({
