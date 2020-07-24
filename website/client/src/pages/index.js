@@ -66,7 +66,7 @@ const features = [
     description: 'Effector uses Rollup and Terser to provide small builds.',
   },
   {
-    title: 'Plain javascript',
+    title: 'Plain JavaScript',
     imageUrl: 'img/js-logo.svg',
     description:
       'No decorators, no proxies, no classes required. Only you and your data.',
